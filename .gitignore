@@ -3,3 +3,4 @@
 terraform-terragrunt-showcase.iml
 
 *.iml
+/.terraform/
