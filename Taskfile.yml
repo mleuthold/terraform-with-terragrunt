@@ -1,4 +1,3 @@
----
 # https://taskfile.dev
 
 version: '2'
@@ -7,7 +6,11 @@ vars:
   GREETING: Hello, World!
 
 tasks:
-  default:
+  format-all:
     cmds:
-      - echo "{{.GREETING}}"
-    silent: true
+      - terraform fmt -recursive
+      - terragrunt hclfmt
+
+  init-all:
+    cmds:
+      - find . -not -path '*/.terragrunt-cache/*' -type f -name terragrunt.hcl -execdir terragrunt init -input=false \;
