@@ -1,13 +1,9 @@
-terraform {
-  required_version = "~> 0.12.18"
-
-  required_providers {
-    aws = "~> 2.43.0"
-  }
-}
-
 provider "aws" {
   region = "eu-west-1"
+}
+
+terraform {
+  backend "s3" {}
 }
 
 resource "aws_s3_bucket" "static_content" {
@@ -113,3 +109,46 @@ resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
   comment = "access-identity-${aws_s3_bucket.static_content.bucket_regional_domain_name}"
 }
 
+# check availability of Snowplow JS tracker in the S3 bucket
+data "external" "is_snowplow_js_available" {
+  program = ["sh", "-c",
+    <<EOF
+    #!/bin/bash
+
+    set -e
+
+    if aws s3 ls s3://${aws_s3_bucket.static_content.bucket}/${var.js_name} 2>/dev/null 1>/dev/null
+    then
+      MY_RESULT=0
+    else
+      MY_RESULT=$(uuidgen)
+    fi
+
+    jq -n --arg foobaz "$MY_RESULT" '{"out":$foobaz}'
+    EOF
+  ]
+
+}
+
+# make the Snowplow JS tracker available on the S3 bucket
+resource "null_resource" "snowplow_js_deployment" {
+  triggers = {
+    is = data.external.is_snowplow_js_available.result.out
+  }
+  provisioner "local-exec" {
+    command = <<EOT
+              #!/usr/bin/env bash
+
+              set -e
+
+              if echo "${var.snowplow_js_url}" | grep ".cloudfront.net/"; then
+                wget -O - ${var.snowplow_js_url} | gunzip -c > ./${var.js_name}
+              else
+                wget -O - ${var.snowplow_js_url} > ./${var.js_name}
+              fi
+
+              aws s3 cp ./${var.js_name} s3://${aws_s3_bucket.static_content.bucket}/
+              aws cloudfront create-invalidation --distribution-id ${aws_cloudfront_distribution.cdn.id} --paths "/*"
+              EOT
+  }
+}

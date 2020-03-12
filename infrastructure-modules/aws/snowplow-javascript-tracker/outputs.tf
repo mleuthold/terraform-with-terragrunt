@@ -17,3 +17,8 @@ output "cloudfront_distribution_id" {
   description = ""
   value       = aws_cloudfront_distribution.cdn.id
 }
+
+output "snowplow_js_url" {
+  description = "Link to Snowplow JS file on the CloudFront distribution."
+  value       = "https://${aws_cloudfront_distribution.cdn.domain_name}/${var.js_name}"
+}

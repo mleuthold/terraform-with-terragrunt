@@ -1,5 +1,5 @@
 provider "kafka" {
-  bootstrap_servers = [var.bootstrap_servers, ]
+  bootstrap_servers = [var.kafka_bootstrap_servers, ]
   skip_tls_verify   = true
   tls_enabled       = true
 }
@@ -10,8 +10,8 @@ terraform {
 
 resource "kafka_topic" "default" {
   name               = var.name
-  replication_factor = 3
-  partitions         = 5
+  replication_factor = var.replication_factor
+  partitions         = var.partitions
 
   config = {
     "compression.type" = "gzip"
