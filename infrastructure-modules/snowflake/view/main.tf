@@ -16,4 +16,3 @@ resource "snowflake_view" "view" {
   schema    = var.schema_name
   statement = var.view_statement
 }
-

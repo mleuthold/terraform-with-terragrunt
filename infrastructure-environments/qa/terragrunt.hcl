@@ -1,11 +1,11 @@
 remote_state {
   backend = "s3"
   config = {
-    bucket = "terraform-state-dev"
+    bucket = "terraform-state-stg"
     key    = "${basename(get_parent_terragrunt_dir())}/${path_relative_to_include()}/terraform.tfstate"
     region = "eu-west-1"
 
-    dynamodb_table = "terraform-state-lock-dev"
+    dynamodb_table = "terraform-state-lock-stg"
     encrypt        = true
   }
 }

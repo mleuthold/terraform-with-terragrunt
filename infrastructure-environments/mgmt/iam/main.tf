@@ -31,4 +31,3 @@ resource "aws_iam_role_policy_attachment" "gitlab_runner_access_assume_role-admi
   role       = aws_iam_role.iac_role.name
   policy_arn = data.aws_iam_policy.AdministratorAccess.arn
 }
-

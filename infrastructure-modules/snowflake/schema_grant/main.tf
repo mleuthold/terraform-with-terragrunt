@@ -14,4 +14,3 @@ resource "snowflake_schema_grant" "grant" {
   roles         = var.snowflake_consumer_roles
   schema_name   = var.schema_name
 }
-

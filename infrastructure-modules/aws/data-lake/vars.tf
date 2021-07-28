@@ -3,5 +3,5 @@ variable "environment" {
 }
 
 variable "PrincipalOrgID" {
-  type    = string
+  type = string
 }

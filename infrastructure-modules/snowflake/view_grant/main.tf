@@ -15,4 +15,3 @@ resource "snowflake_view_grant" "grant" {
   schema_name   = var.schema_name
   view_name     = var.view_name
 }
-

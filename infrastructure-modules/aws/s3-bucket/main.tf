@@ -19,4 +19,3 @@ resource "aws_s3_bucket_metric" "s3_metrics" {
   bucket = aws_s3_bucket.bucket.bucket
   name   = "entire-bucket"
 }
-

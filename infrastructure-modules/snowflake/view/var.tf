@@ -1,9 +1,9 @@
 variable "snowflake_account" {
-  type    = string
+  type = string
 }
 
 variable "snowflake_username" {
-  type    = string
+  type = string
 }
 
 variable "snowflake_password" {

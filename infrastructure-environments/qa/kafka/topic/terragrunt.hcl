@@ -7,6 +7,6 @@ terraform {
 }
 
 inputs = {
-  name              = "example-topic-dev"
+  name              = "example-topic-stg"
   bootstrap_servers = "localhost:9091"
 }

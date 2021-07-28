@@ -1,10 +1,10 @@
 # https://taskfile.dev
 
-version: '2'
+version: '3'
 
 env:
   DOCKER_REGISTRY: '{{default "localhost" .DOCKER_REGISTRY}}'
-  DOCKER_IMAGE_NAME: '{{default "terraform-terragrunt-showcase" .DOCKER_IMAGE_NAME}}'
+  DOCKER_IMAGE_NAME: '{{default "terraform-with-terragrunt" .DOCKER_IMAGE_NAME}}'
 
 tasks:
   build:

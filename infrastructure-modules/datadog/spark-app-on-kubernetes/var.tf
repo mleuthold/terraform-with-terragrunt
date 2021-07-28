@@ -14,7 +14,7 @@ variable "datadog_name_prefix" {
 }
 
 locals {
-  env         = "env:prod"
+  env = "env:prod"
 
   tags = [
     "env:prod",
