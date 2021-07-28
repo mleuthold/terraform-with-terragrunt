@@ -8,7 +8,7 @@ output "s3_bucket_name" {
   value       = aws_s3_bucket.bucket.bucket
 }
 
-output "tags" {
-  description = ""
-  value       = local.tags
+output "cloudfront_web_link" {
+  description = "Web link to access CloudFront distribution in browser"
+  value       = aws_cloudfront_distribution.s3_distribution.domain_name
 }
