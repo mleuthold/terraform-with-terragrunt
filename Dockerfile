@@ -25,12 +25,16 @@ RUN pip3 install -r /tmp/requirements.txt
 # TASKFILE
 RUN curl -sL https://taskfile.dev/install.sh | sh
 
-# TERRAFORM
+# TFENV
 RUN git clone https://github.com/tfutils/tfenv.git ~/.tfenv \
-    && sudo ln -s ~/.tfenv/bin/* /usr/local/bin \
-    && tfenv install 0.12.28
+    && sudo ln -s ~/.tfenv/bin/* /usr/local/bin
 
-# TERRAGRUNT
+# TGENV
 RUN git clone https://github.com/cunymatthieu/tgenv.git ~/.tgenv \
-    && sudo ln -s ~/.tgenv/bin/* /usr/local/bin \
-    && tgenv install 0.23.31
+    && sudo ln -s ~/.tgenv/bin/* /usr/local/bin
+
+# Terraform and Terragrunt
+RUN tfenv install 0.12.28 \
+    && tfenv install 1.0.3 \
+    && tgenv install 0.23.31 \
+    && tgenv install 0.31.3

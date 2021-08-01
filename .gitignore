@@ -3,4 +3,11 @@
 terraform-terragrunt-showcase.iml
 
 *.iml
-/.terraform/
+
+*.python-version
+*.pyc
+
+target/
+
+.terragrunt-cache/
+.terraform/

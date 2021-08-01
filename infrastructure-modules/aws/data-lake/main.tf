@@ -1,13 +1,22 @@
+terraform {
+  backend "s3" {}
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "3.52.0"
+    }
+  }
+}
+
 provider "aws" {
   region = "eu-west-1"
 }
 
-terraform {
-  backend "s3" {}
-}
+data "aws_caller_identity" "current" {}
 
 resource "aws_s3_bucket" "bucket_logs" {
-  bucket = "data-${var.environment}-logs"
+  bucket = "${data.aws_caller_identity.current.account_id}-data-${var.environment}-logs"
   acl    = "log-delivery-write"
 
   // delete logs older than 90 days
@@ -62,7 +71,7 @@ resource "aws_s3_bucket" "bucket_logs" {
 }
 
 resource "aws_s3_bucket" "bucket_data" {
-  bucket = "data-${var.environment}"
+  bucket = "${data.aws_caller_identity.current.account_id}-data-${var.environment}"
   acl    = "private"
 
   request_payer = "BucketOwner"
@@ -78,7 +87,7 @@ resource "aws_s3_bucket" "bucket_data" {
   }
 }
 
-resource "aws_s3_bucket_metric" "metric_environment" {
+resource "aws_s3_bucket_metric" "bucket_metrics" {
   bucket = aws_s3_bucket.bucket_data.bucket
   name   = "metric-${var.environment}"
 
@@ -87,12 +96,12 @@ resource "aws_s3_bucket_metric" "metric_environment" {
   }
 }
 
-resource "aws_s3_bucket_metric" "metric_all" {
+resource "aws_s3_bucket_metric" "bucket_metric" {
   bucket = aws_s3_bucket.bucket_data.bucket
   name   = "all-bucket"
 }
 
-resource "aws_s3_bucket_policy" "bucket_data" {
+resource "aws_s3_bucket_policy" "bucket_data_policy" {
   bucket = aws_s3_bucket.bucket_data.bucket
 
   policy = <<POLICY
@@ -124,7 +133,7 @@ POLICY
 
 }
 
-resource "aws_s3_bucket_policy" "bucket_logs" {
+resource "aws_s3_bucket_policy" "bucket_logs_policy" {
   bucket = aws_s3_bucket.bucket_logs.bucket
 
   policy = <<POLICY
